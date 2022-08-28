@@ -38,7 +38,7 @@ export const authOptions: NextAuthOptions = {
         token: {
           async request(context) {
             const tokens = await context.client.oauthCallback(
-              process.env.EXPO_PROXY_URL,
+              undefined,
               context.params,
               context.checks
             );
@@ -57,15 +57,15 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
-      else if (process.env.EXPO_PROXY_URL && url === process.env.EXPO_PROXY_URL)
-        return url;
-      return baseUrl;
-    },
+    // async redirect({ url, baseUrl }) {
+    //   // Allows relative callback URLs
+    //   if (url.startsWith("/")) return `${baseUrl}${url}`;
+    //   // Allows callback URLs on the same origin
+    //   else if (new URL(url).origin === baseUrl) return url;
+    //   else if (process.env.EXPO_PROXY_URL && url === process.env.EXPO_PROXY_URL)
+    //     return url;
+    //   return baseUrl;
+    // },
     async signIn({ account }) {
       const userByAccount = await prismaAdapter.getUserByAccount({
         providerAccountId: account.providerAccountId,
